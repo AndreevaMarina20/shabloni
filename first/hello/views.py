@@ -1,9 +1,17 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import *
 # Create your views here.
 
 def index(request):
-    pass
+    books = Book.objects.filter(is_available=True).order_by('title')
+    return render(request, 'index.html', {'books': books})
+
+    author = get_object_or_404(Author, id=author_id)
+    books = Book.objects.filter(author=author).order_by('-publication_year')
+    return render(request, 'author_books.html', {
+        'author': author,
+        'books': books
+    })
 # Задание 1.
 
 # Создайте функцию, которая должна: 
