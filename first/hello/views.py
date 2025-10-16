@@ -14,9 +14,13 @@ def task2(request):
 from django.db.models import Count, Avg, Min, Max
 
 def task3(request):
-    avg_price = Book.objects.aggregate(Avg("price"), Min("price"), Max("price"))
-    authors = Author.objects.annotate(count=Count('book')).filter(count__gt=1)
-    return render(request,'task3.html', {'avg': avg_price})
+    total_books = Book.objects.count()
+    avg_price_result = Book.objects.aggregate(avg_price=Avg("price"))
+    avg_price = round(avg_price_result['avg_price'], 2) if avg_price_result['avg_price'] else 0
+    years = Book.objects.aggregate(earliest_year=Min("publication_year"), latest_year=Max("publication_year"))
+    authors_with_multiple_books = Author.objects.annotate(book_count=Count('book')).filter(book_count__gt=1)
+    context = {'total_books': total_books, 'avg_price': avg_price, 'earliest_year': years['earliest_year'], 'latest_year': years['latest_year'], 'authors': authors_with_multiple_books}
+    return render(request, 'task3.html', context)
 
 def task4(request):
     books = Book.objects.filter(price__gt=1000, publication_year__lt=1980).order_by('-price')
