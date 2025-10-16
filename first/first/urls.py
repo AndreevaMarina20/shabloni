@@ -20,5 +20,8 @@ from hello import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index)
+    path('book', views.index),
+    path('author', views.task2),
+    path('avg', views.task3),
+    path('old_books', views.task4),
 ]

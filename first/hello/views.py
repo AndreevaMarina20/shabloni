@@ -3,7 +3,25 @@ from .models import *
 # Create your views here.
 
 def index(request):
-    pass
+    books = Book.objects.filter(is_available=True).order_by('title')
+    return render(request, 'index.html', {'books': books})
+
+def task2(request):
+    id_a = 1
+    books = Book.objects.filter(author=id_a).order_by("-publication_year")
+    return render(request, 'task2.html', {'books': books})
+
+from django.db.models import Count, Avg, Min, Max
+
+def task3(request):
+    avg_price = Book.objects.aggregate(Avg("price"), Min("price"), Max("price"))
+    authors = Author.objects.annotate(count=Count('book')).filter(count__gt=1)
+    return render(request,'task3.html', {'avg': avg_price})
+
+def task4(request):
+    books = Book.objects.filter(price__gt=1000, publication_year__lt=1980).order_by('-price')
+    return render(request, 'task4.html', {'books': books})
+    
 # Задание 1.
 
 # Создайте функцию, которая должна: 
