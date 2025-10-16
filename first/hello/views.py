@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import *
 # Create your views here.
 
@@ -6,6 +6,7 @@ def index(request):
     books = Book.objects.filter(is_available=True).order_by('title')
     return render(request, 'index.html', {'books': books})
 
+<<<<<<< HEAD
 def task2(request):
     id_a = 1
     books = Book.objects.filter(author=id_a).order_by("-publication_year")
@@ -26,6 +27,14 @@ def task4(request):
     books = Book.objects.filter(price__gt=1000, publication_year__lt=1980).order_by('-price')
     return render(request, 'task4.html', {'books': books})
     
+=======
+    author = get_object_or_404(Author, id=author_id)
+    books = Book.objects.filter(author=author).order_by('-publication_year')
+    return render(request, 'author_books.html', {
+        'author': author,
+        'books': books
+    })
+>>>>>>> c210012844e9fce62eac47e0339c284074c6a339
 # Задание 1.
 
 # Создайте функцию, которая должна: 
